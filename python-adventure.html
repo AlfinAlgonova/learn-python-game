@@ -1,0 +1,1235 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Petualangan Python - Belajar Python dengan Seru!</title>
+    <style>
+        /* ==========================================================================
+           1. CSS VARIABLES & THEMES
+           ========================================================================== */
+        :root {
+            --bg-gradient: linear-gradient(135deg, #a8edd9 0%, #fed6e3 100%);
+            --glass-bg: rgba(255, 255, 255, 0.65);
+            --glass-border: rgba(255, 255, 255, 0.8);
+            --glass-shadow: 0 12px 32px 0 rgba(31, 38, 135, 0.12);
+            --card-bg: rgba(255, 255, 255, 0.85);
+            --text-primary: #2d3748;
+            --text-secondary: #4a5568;
+            --accent-green: #48bb78;
+            --accent-green-hover: #38a169;
+            --accent-red: #f56565;
+            --accent-blue: #4299e1;
+            --accent-purple: #9f7aea;
+            --accent-yellow: #ecc94b;
+            --primary-button: #667eea;
+            --primary-button-hover: #5a67d8;
+            --font-family: 'Comic Sans MS', 'Chalkboard SE', 'Segoe UI', Roboto, sans-serif;
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --radius-sm: 10px;
+        }
+
+        [data-theme="dark"] {
+            --bg-gradient: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+            --glass-bg: rgba(26, 32, 44, 0.75);
+            --glass-border: rgba(255, 255, 255, 0.15);
+            --glass-shadow: 0 12px 32px 0 rgba(0, 0, 0, 0.37);
+            --card-bg: rgba(45, 55, 72, 0.85);
+            --text-primary: #f7fafc;
+            --text-secondary: #e2e8f0;
+            --primary-button: #7f9cf5;
+            --primary-button-hover: #667eea;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background: var(--bg-gradient);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            transition: background 0.5s ease;
+        }
+
+        /* ==========================================================================
+           2. CANVAS & BACKGROUND ANIMATIONS
+           ========================================================================== */
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        #confetti-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 100;
+            pointer-events: none;
+        }
+
+        .app-container {
+            position: relative;
+            z-index: 1;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        /* ==========================================================================
+           3. GLASSMORPHISM UI ELEMENTS
+           ========================================================================== */
+        .glass-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 2px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--glass-shadow);
+            padding: 28px;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
+        }
+
+        .btn {
+            background: var(--primary-button);
+            color: #ffffff;
+            border: none;
+            padding: 14px 28px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            outline: none;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px) scale(1.03);
+            background: var(--primary-button-hover);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+
+        .btn:active {
+            transform: translateY(1px) scale(0.98);
+        }
+
+        /* ==========================================================================
+           4. HEADER & TOP NAV BAR
+           ========================================================================== */
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 2px solid var(--glass-border);
+            border-radius: 50px;
+            padding: 12px 24px;
+            margin-bottom: 24px;
+            box-shadow: var(--glass-shadow);
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .stat-badge {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: bold;
+            font-size: 1rem;
+            background: rgba(255, 255, 255, 0.4);
+            padding: 6px 14px;
+            border-radius: 20px;
+        }
+
+        .theme-toggle {
+            background: transparent;
+            border: none;
+            font-size: 1.4rem;
+            cursor: pointer;
+            padding: 4px;
+            transition: transform 0.3s;
+        }
+        .theme-toggle:hover { transform: rotate(20deg) scale(1.1); }
+
+        /* ==========================================================================
+           5. MASCOT PY & SPEECH BUBBLE
+           ========================================================================== */
+        .mascot-container {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .speech-bubble {
+            position: relative;
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 14px 20px;
+            color: #2d3748;
+            font-weight: bold;
+            font-size: 1.1rem;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+            max-width: 320px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .speech-bubble::after {
+            content: '';
+            position: absolute;
+            left: -12px;
+            top: 50%;
+            transform: translateY(-50%);
+            border-width: 8px 12px 8px 0;
+            border-style: solid;
+            border-color: transparent #ffffff transparent transparent;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+        }
+
+        /* SVG Animated Python Mascot */
+        .py-mascot {
+            width: 100px;
+            height: 100px;
+            filter: drop-shadow(0 6px 12px rgba(0,0,0,0.15));
+            animation: mascotIdle 4s ease-in-out infinite;
+        }
+
+        @keyframes mascotIdle {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.05) rotate(3deg); }
+        }
+
+        /* ==========================================================================
+           6. SCREENS: HOME / GAME / RESULT
+           ========================================================================== */
+        .screen { display: none; }
+        .screen.active { display: block; animation: fadeIn 0.4s ease-out; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* HOME SCREEN */
+        .home-card {
+            text-align: center;
+            padding: 40px 20px;
+        }
+        .home-title {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #48bb78, #4299e1, #9f7aea);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .chapter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin: 30px 0;
+        }
+        .chapter-card {
+            background: rgba(255, 255, 255, 0.5);
+            border: 2px solid var(--glass-border);
+            border-radius: var(--radius-md);
+            padding: 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        .chapter-card:hover {
+            transform: translateY(-50px) scale(1.03);
+            background: rgba(255, 255, 255, 0.85);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .chapter-card.locked {
+            opacity: 0.6;
+            cursor: not-allowed;
+            filter: grayscale(0.5);
+        }
+        .chapter-card.locked:hover {
+            transform: none;
+            background: rgba(255, 255, 255, 0.5);
+            box-shadow: none;
+        }
+
+        /* QUESTION TYPES & INTERACTION */
+        .question-text {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .options-grid { grid-template-columns: 1fr; }
+        }
+
+        .option-btn {
+            background: rgba(255, 255, 255, 0.7);
+            border: 2px solid var(--glass-border);
+            padding: 16px 20px;
+            border-radius: var(--radius-md);
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.2s ease;
+            color: var(--text-primary);
+        }
+
+        .option-btn:hover {
+            background: #ffffff;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.08);
+        }
+
+        .option-btn.correct {
+            background: #c6f6d5 !important;
+            border-color: #38a169 !important;
+            color: #22543d !important;
+            animation: pulseGreen 0.5s ease;
+        }
+
+        .option-btn.wrong {
+            background: #fed7d7 !important;
+            border-color: #e53e3e !important;
+            color: #742a2a !important;
+            animation: shake 0.4s ease;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-8px); }
+            40%, 80% { transform: translateX(8px); }
+        }
+
+        @keyframes pulseGreen {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.04); }
+            100% { transform: scale(1); }
+        }
+
+        /* CODE & TERMINAL EXPLANATION SECTION */
+        .explanation-panel {
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.04);
+            border-radius: var(--radius-md);
+            border-left: 6px solid var(--accent-blue);
+            display: none;
+            animation: slideDown 0.3s ease-out forwards;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .terminal-box {
+            background: #1a202c;
+            color: #68d391;
+            font-family: 'Courier New', Courier, monospace;
+            padding: 14px;
+            border-radius: var(--radius-sm);
+            margin-top: 10px;
+            box-shadow: inset 0 2px 6px rgba(0,0,0,0.4);
+            position: relative;
+        }
+
+        .terminal-header {
+            font-size: 0.75rem;
+            color: #a0aec0;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* PROGRESS BAR */
+        .progress-container {
+            width: 100%;
+            height: 14px;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #48bb78, #4299e1);
+            transition: width 0.4s ease;
+            border-radius: 10px;
+        }
+
+        /* BADGES GRID */
+        .badges-grid {
+            display: flex;
+            justify-content: center;
+            gap: 14px;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+
+        .badge-item {
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 50%;
+            width: 70px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        .badge-item:hover { transform: scale(1.15) rotate(10deg); }
+
+        /* CODES / TYPING EDITOR / DRAG DROP */
+        .code-block {
+            background: #2d3748;
+            color: #f7fafc;
+            padding: 12px;
+            border-radius: var(--radius-sm);
+            font-family: monospace;
+            font-size: 1rem;
+            margin-bottom: 12px;
+        }
+
+        .input-code {
+            width: 100%;
+            padding: 12px;
+            border-radius: var(--radius-sm);
+            border: 2px solid var(--glass-border);
+            font-family: monospace;
+            font-size: 1.1rem;
+            margin-bottom: 14px;
+            outline: none;
+        }
+
+        /* CUSTOM NOTIFICATION MODAL */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(4px);
+            z-index: 200;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-overlay.active { display: flex; animation: fadeIn 0.3s ease; }
+        .modal-card {
+            background: var(--card-bg);
+            border: 2px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            padding: 24px 32px;
+            text-align: center;
+            max-width: 400px;
+            box-shadow: var(--glass-shadow);
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="bg-canvas"></canvas>
+    <canvas id="confetti-canvas"></canvas>
+
+    <div class="app-container">
+        <!-- TOP NAVIGATION & STATUS BAR -->
+        <div class="top-bar">
+            <div class="stat-badge">❤️ <span id="lives-count">5</span></div>
+            <div class="stat-badge">⭐ <span id="xp-count">0</span> XP</div>
+            <div class="stat-badge">🪙 <span id="coins-count">0</span></div>
+            <div class="stat-badge">🏆 <span id="level-name">Telur Python</span></div>
+            <button class="theme-toggle" id="theme-btn" title="Ubah Tema">🌙</button>
+        </div>
+
+        <!-- HOME SCREEN -->
+        <div id="screen-home" class="screen active">
+            <div class="glass-card home-card">
+                <h1 class="home-title">Petualangan Python</h1>
+                <p style="font-size: 1.2rem; color: var(--text-secondary); margin-bottom: 20px;">
+                    Belajar coding seru bersama Py, sahabat Python kamu! 🐍
+                </p>
+
+                <!-- MASCOT DISPLAY -->
+                <div class="mascot-container" style="justify-content: center;">
+                    <svg class="py-mascot" viewBox="0 0 100 100">
+                        <circle cx="50" cy="50" r="40" fill="#48bb78" />
+                        <circle cx="35" cy="40" r="6" fill="#fff" />
+                        <circle cx="65" cy="40" r="6" fill="#fff" />
+                        <circle cx="35" cy="40" r="3" fill="#000" />
+                        <circle cx="65" cy="40" r="3" fill="#000" />
+                        <path d="M 35 60 Q 50 75 65 60" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round"/>
+                    </svg>
+                    <div class="speech-bubble" id="home-speech">Siap jelajahi keajaiban koding Python hari ini?</div>
+                </div>
+
+                <div class="chapter-grid">
+                    <div class="chapter-card" onclick="startChapter(0)">
+                        <h3>📜 Bab 1</h3>
+                        <p>Pengenalan Python</p>
+                    </div>
+                    <div class="chapter-card" onclick="startChapter(1)">
+                        <h3>🔢 Bab 2</h3>
+                        <p>Angka & Matematika</p>
+                    </div>
+                    <div class="chapter-card locked" onclick="showLockedMessage()">
+                        <h3>🔒 Bab 3</h3>
+                        <p>Kondisional (If/Else)</p>
+                    </div>
+                </div>
+
+                <button class="btn" style="font-size: 1.3rem; padding: 16px 36px;" onclick="startChapter(0)">
+                    🚀 Mulai Petualangan
+                </button>
+            </div>
+        </div>
+
+        <!-- GAMEPLAY SCREEN -->
+        <div id="screen-game" class="screen">
+            <div class="progress-container">
+                <div class="progress-fill" id="progress-bar"></div>
+            </div>
+
+            <!-- MASCOT & SPEECH -->
+            <div class="mascot-container">
+                <svg class="py-mascot" id="game-mascot" viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="40" fill="#48bb78" />
+                    <circle cx="35" cy="40" r="6" fill="#fff" />
+                    <circle cx="65" cy="40" r="6" fill="#fff" />
+                    <circle id="left-eye" cx="35" cy="40" r="3" fill="#000" />
+                    <circle id="right-eye" cx="65" cy="40" r="3" fill="#000" />
+                    <path id="mascot-mouth" d="M 35 60 Q 50 75 65 60" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round"/>
+                </svg>
+                <div class="speech-bubble" id="game-speech">Yuk, kita selesaikan kode ini bersama!</div>
+            </div>
+
+            <!-- QUESTION CARD -->
+            <div class="glass-card" id="question-card">
+                <div class="question-text" id="question-text">Memuat pertanyaan...</div>
+
+                <div id="question-interactive-container">
+                    <!-- Dynamic choices / input rendered here -->
+                </div>
+
+                <!-- EXPLANATION & SIMULATED TERMINAL -->
+                <div class="explanation-panel" id="explanation-panel">
+                    <h3>💡 Penjelasan</h3>
+                    <p id="explanation-text" style="margin-top: 6px; font-size: 1rem;"></p>
+
+                    <div style="margin-top: 12px; font-weight: bold; color: var(--accent-purple);">
+                        🐍 Tips Python: <span id="python-tip-text" style="font-weight: normal;"></span>
+                    </div>
+
+                    <div class="terminal-box">
+                        <div class="terminal-header">Simulasi Hasil Terminal</div>
+                        <div id="terminal-output">> Hasil akan muncul di sini...</div>
+                    </div>
+
+                    <button class="btn" style="margin-top: 16px; width: 100%;" onclick="nextQuestion()">Tantangan Berikutnya ➔</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- RESULT SCREEN -->
+        <div id="screen-result" class="screen">
+            <div class="glass-card" style="text-align: center; padding: 40px 20px;">
+                <h1 style="font-size: 2.5rem; margin-bottom: 10px;">🎉 Bab Selesai!</h1>
+                <p style="font-size: 1.2rem; color: var(--text-secondary);">Kamu makin jago jadi Penyihir Python!</p>
+
+                <div style="margin: 30px 0; font-size: 1.4rem; display: flex; justify-content: center; gap: 30px;">
+                    <div>⭐ <br><strong id="res-xp">+0 XP</strong></div>
+                    <div>🪙 <br><strong id="res-coins">+0 Koin</strong></div>
+                </div>
+
+                <div class="badges-grid" id="unlocked-badges">
+                    <div class="badge-item" title="Pembelajar Cepat">⚡</div>
+                    <div class="badge-item" title="Pahlawan Python">🐍</div>
+                    <div class="badge-item" title="Ninja Koding">🥷</div>
+                </div>
+
+                <button class="btn" style="font-size: 1.2rem; margin-top: 20px;" onclick="goHome()">Kembali ke Halaman Utama</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- LOCK NOTIFICATION MODAL -->
+    <div class="modal-overlay" id="lock-modal">
+        <div class="modal-card">
+            <h2 style="margin-bottom: 10px; font-size: 1.8rem;">🔒 Terkunci</h2>
+            <p style="font-size: 1.1rem; line-height: 1.5; color: var(--text-secondary); margin-bottom: 20px;">
+                Bab ini masih terkunci.<br>Selesaikan Bab 2 untuk membukanya.
+            </p>
+            <button class="btn" onclick="closeLockedMessage()">Mengerti!</button>
+        </div>
+    </div>
+
+    <!-- ==========================================================================
+       7. JAVASCRIPT LOGIC & AUDIO SYNTHESIZER
+       ========================================================================== -->
+    <script>
+        /* ----------------------------------------------------------------------
+           A. AUDIO SYNTHESIZER (Web Audio API - No External Files)
+           ---------------------------------------------------------------------- */
+        const AudioEngine = {
+            ctx: null,
+            init() {
+                if (!this.ctx) {
+                    this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+            },
+            playNote(freq, type = 'sine', duration = 0.15) {
+                this.init();
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                osc.type = type;
+                osc.frequency.value = freq;
+                gain.gain.setValueAtTime(0.15, this.ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + duration);
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                osc.start();
+                osc.stop(this.ctx.currentTime + duration);
+            },
+            click() { this.playNote(400, 'sine', 0.08); },
+            correct() {
+                this.playNote(523.25, 'triangle', 0.1);
+                setTimeout(() => this.playNote(659.25, 'triangle', 0.1), 100);
+                setTimeout(() => this.playNote(783.99, 'triangle', 0.2), 200);
+            },
+            wrong() {
+                this.playNote(220, 'sawtooth', 0.15);
+                setTimeout(() => this.playNote(180, 'sawtooth', 0.25), 120);
+            }
+        };
+
+        /* ----------------------------------------------------------------------
+           B. QUESTION DATASET
+           ---------------------------------------------------------------------- */
+        const chapters = [
+            {
+                title: "Pengenalan Python",
+                questions: [
+                    {
+                        type: "mc",
+                        question: "🐍 Py:\n\"Halo! Aku Py. Menurutmu, apa sih sebenarnya Python itu?\"",
+                        options: [
+                            "Bahasa pemrograman super keren buat bikin aplikasi",
+                            "Ular sungguhan yang tinggal di dalam komputer",
+                            "Nama merk makanan ringan",
+                            "Judul film animasi tentang binatang"
+                        ],
+                        answer: 0,
+                        explanation: "Hebat! Python adalah bahasa pemrograman yang digunakan untuk membuat game, website, AI, dan banyak hal keren lainnya!",
+                        tip: "Python adalah salah satu bahasa koding paling populer di dunia!",
+                        output: "Python = Bahasa Pemrograman"
+                    },
+                    {
+                        type: "mc",
+                        question: "🐍 Py:\n\"Kamu tahu gak, siapa pahlawan yang menciptakan bahasa Python pertama kali?\"",
+                        options: [
+                            "Guido van Rossum",
+                            "Albert Einstein",
+                            "Steve Jobs",
+                            "SpongeBob SquarePants"
+                        ],
+                        answer: 0,
+                        explanation: "Keren banget! Guido van Rossum menciptakan Python pada tahun 1991 karena ingin bahasa koding yang mudah dibaca.",
+                        tip: "Guido membuat Python agar semua orang bisa belajar koding dengan menyenangkan!",
+                        output: "Pencipta: Guido van Rossum"
+                    },
+                    {
+                        type: "mc",
+                        question: "🐍 Py:\n\"Coba tebak, gambar hewan apa yang jadi logo resmiku?\"",
+                        options: [
+                            "Dua ular berwarna biru dan kuning",
+                            "Kucing hitam lucu",
+                            "Naga hijau raksasa",
+                            "Burung hantu pintar"
+                        ],
+                        answer: 0,
+                        explanation: "Tepat sekali! Logo Python menggambarkan dua ekor ular yang saling melingkar anggun.",
+                        tip: "Warna khas Python adalah kombinasi biru dan kuning!",
+                        output: "Logo: 🐍 Ular Biru & Kuning"
+                    },
+                    {
+                        type: "mc",
+                        question: "🐍 Py:\n\"Mengapa ya banyak programmer pemula suka sekali belajar Python?\"",
+                        options: [
+                            "Bahasa kodingnya simpel dan mirip bahasa Inggris",
+                            "Harus pakai komputer seharga seratus juta",
+                            "Sangat rumit dan susah dibaca",
+                            "Hanya bisa dipakai malam hari"
+                        ],
+                        answer: 0,
+                        explanation: "Pintar! Kode Python dibuat sangat ringkas dan mudah dipahami, mirip membaca kalimat bahasa Inggris sehari-hari.",
+                        tip: "Koding Python itu gak bikin pusing karena perintahnya singkat!",
+                        output: "Kelebihan: Simpel & Mudah Dibaca"
+                    },
+                    {
+                        type: "mc",
+                        question: "🐍 Py:\n\"Wah, teknologi AI seperti ChatGPT makin canggih! Bahasa apa yang dipakai buat bikin AI?\"",
+                        options: [
+                            "Python",
+                            "Bahasa Isyarat",
+                            "HTML biasa",
+                            "Microsoft Paint"
+                        ],
+                        answer: 0,
+                        explanation: "Luar biasa! Python adalah bahasa utama dalam dunia Kecerdasan Buatan (AI) dan Machine Learning.",
+                        tip: "Banyak robot dan sistem AI pintar diprogram menggunakan Python!",
+                        output: "Bidang: AI & Kecerdasan Buatan"
+                    },
+                    {
+                        type: "mc",
+                        question: "🐍 Py:\n\"Selain AI, kira-kira Python bisa dipakai untuk membuat apa lagi ya?\"",
+                        options: [
+                            "Game, website, dan analisis data",
+                            "Hanya untuk menghitung kalkulator",
+                            "Membuat kue di dapur",
+                            "Menggambar di kertas polos"
+                        ],
+                        answer: 0,
+                        explanation: "Luar biasa! Python itu serba bisa. Kamu bisa bikin website keren, game seru, hingga mengolah data raksasa!",
+                        tip: "Situs besar seperti YouTube dan Instagram juga menggunakan Python!",
+                        output: "Kegunaan: Game + Website + Data"
+                    },
+                    {
+                        type: "mc",
+                        question: "🐍 Py:\n\"Aplikasi populer mana nih yang menggunakan Python di sistem backend mereka?\"",
+                        options: [
+                            "YouTube & Instagram",
+                            "Buku Tulis Sekolah",
+                            "Papan Tulis Kapur",
+                            "Kaset Pita Jadul"
+                        ],
+                        answer: 0,
+                        explanation: "Mantap! Perusahaan raksasa seperti Instagram, YouTube, dan Spotify mengandalkan Python.",
+                        tip: "Belajar Python membuka peluang besar untuk bikin aplikasi terkenal!",
+                        output: "Pengguna: Instagram & YouTube"
+                    },
+                    {
+                        type: "typing",
+                        question: "🐍 Py:\n\"Yuk coba kirim pesan pertama! Ketik fungsi untuk menampilkan teks ke layar:\"",
+                        codeSnippet: '___("Halo Dunia")',
+                        correctInput: 'print',
+                        explanation: "Hore berhasil! Perintah 'print' bertugas menampilkan teks atau pesan ke layar komputer.",
+                        tip: "Selalu gunakan huruf kecil untuk fungsi print() ya!",
+                        output: "Halo Dunia"
+                    },
+                    {
+                        type: "mc",
+                        question: "🐍 Py:\n\"Kalau aku ingin menyapa dunia lewat kode, tulisan apa yang paling legendaris?\"",
+                        options: [
+                            "Hello World",
+                            "Selamat Tinggal Komputer",
+                            "Aku Lupa Kode",
+                            "Permisi Numpang Lewat"
+                        ],
+                        answer: 0,
+                        explanation: "Super! 'Hello World' adalah ucapan salam tradisi wajib bagi semua programmer di dunia saat baru belajar!",
+                        tip: "Mencetak Hello World adalah langkah pertamamu jadi programmer hebat!",
+                        output: "Hello World"
+                    },
+                    {
+                        type: "mc",
+                        question: "🐍 Py:\n\"Bagaimana cara penulisan perintah cetak yang BENAR di Python?\"",
+                        options: [
+                            "print(\"Halo\")",
+                            "PRINT(\"Halo\")",
+                            "Print[\"Halo\"]",
+                            "cetak(\"Halo\")"
+                        ],
+                        answer: 0,
+                        explanation: "Joss! Python itu sensitif huruf besar-kecil (case-sensitive), jadi wajib pakai huruf kecil 'print' dan tanda kurung ().",
+                        tip: "Perhatikan tanda petik dan kurungnya, jangan sampai ketinggalan!",
+                        output: "Halo"
+                    },
+                    {
+                        type: "mc",
+                        question: "🐍 Py:\n\"Sebenarnya, apa sih yang dimaksud dengan 'Coding' atau Koding itu?\"",
+                        options: [
+                            "Memberikan langkah instruksi ke komputer pakai bahasa khusus",
+                            "Membongkar mesin komputer sampai rusak",
+                            "Bermain game seharian tanpa batas",
+                            "Ketik acak tombol keyboard secepat mungkin"
+                        ],
+                        answer: 0,
+                        explanation: "Benar sekali! Koding adalah cara kita berkomunikasi dan memberi perintah langkah demi langkah kepada komputer.",
+                        tip: "Komputer itu penurut, ia akan melakukan persis apa yang kamu koding!",
+                        output: "Koding = Instruksi Komputer"
+                    },
+                    {
+                        type: "mc",
+                        question: "🐍 Py:\n\"Siapa yang menerjemahkan kodingan Python kita agar dimengerti mesin komputer?\"",
+                        options: [
+                            "Interpreter Python",
+                            "Kamus Bahasa Inggris",
+                            "Mesin Ketik Manual",
+                            "Kalkulator Saku"
+                        ],
+                        answer: 0,
+                        explanation: "Hebat! Interpreter membaca kode Python kita baris demi baris lalu menerjemahkannya ke bahasa mesin.",
+                        tip: "Interpreter bekerja sangat cepat hanya dalam hitungan detik!",
+                        output: "Penerjemah: Interpreter"
+                    },
+                    {
+                        type: "tf",
+                        question: "🐍 Py:\n\"Benar atau Salah: Belajar koding itu harus jago banget matematika rumit?\"",
+                        options: ["Benar", "Salah"],
+                        answer: 1,
+                        explanation: "Tentu Salah! Yang paling penting dalam koding adalah logika berpikir dan kreativitas memecahkan masalah.",
+                        tip: "Siapa saja bisa belajar koding, yang penting mau mencoba dan berlatih!",
+                        output: "Kreativitas > Rumus Rumit"
+                    },
+                    {
+                        type: "mc",
+                        question: "🐍 Py:\n\"Aduh! Kodinganku merah dan muncul tulisan 'Error'. Harus bagaimana ya?\"",
+                        options: [
+                            "Tenang saja, Error itu hal normal! Tinggal kita periksa petunjuknya",
+                            "Menangis dan mematikan komputer",
+                            "Langsung membuang laptop ke tempat sampah",
+                            "Benci koding selamanya"
+                        ],
+                        answer: 0,
+                        explanation: "Sip! Error adalah teman baik programmer. Pesan error memberi tahu di mana letak perbaikan kode kita.",
+                        tip: "Membetulkan error dinamakan 'Debugging'. Senang rasanya kalau berhasil!",
+                        output: "Error = Kesempatan Belajar"
+                    },
+                    {
+                        type: "mc",
+                        question: "🐍 Py:\n\"Istilah keren untuk mencari dan memperbaiki kesalahan kode (error) adalah...\"",
+                        options: [
+                            "Debugging",
+                            "Sleeping",
+                            "Shopping",
+                            "Dancing"
+                        ],
+                        answer: 0,
+                        explanation: "Tepat! 'Debugging' berasal dari kata 'bug' (serangga). Dulu ada serangga asli yang bikin mesin komputer error!",
+                        tip: "Jadilah detektif kode yang jago melakukan Debugging!",
+                        output: "Proses: Debugging"
+                    },
+                    {
+                        type: "mc",
+                        question: "🐍 Py:\n\"Tanda apa yang digunakan untuk mengapit teks di dalam perintah print() Python?\"",
+                        options: [
+                            "Tanda petik, seperti \"Teks\" atau 'Teks'",
+                            "Tanda sama dengan (=)",
+                            "Tanda tambah (+)",
+                            "Tanda pagar (#)"
+                        ],
+                        answer: 0,
+                        explanation: "Keren! Teks di Python (String) diapit oleh tanda petik tunggal '...' atau petik ganda \"...\".",
+                        tip: "Pastikan tanda petiknya dibuka dan ditutup dengan serasi ya!",
+                        output: "\"Teks Terapit Petik\""
+                    },
+                    {
+                        type: "mc",
+                        question: "🐍 Py:\n\"Kalau kita ingin membuat game 2D seru di Python, library apa yang sangat terkenal?\"",
+                        options: [
+                            "Pygame",
+                            "PyFood",
+                            "PySleep",
+                            "PyPark"
+                        ],
+                        answer: 0,
+                        explanation: "Luar biasa! Pygame adalah modul favorit untuk membuat grafik, suara, dan kontrol game dengan Python.",
+                        tip: "Nanti kamu bisa bikin game buatanmu sendiri pakai Pygame!",
+                        output: "Modul Game: Pygame"
+                    },
+                    {
+                        type: "mc",
+                        question: "🐍 Py:\n\"Apa pesan terbaik kalau kamu ingin cepat mahir koding Python?\"",
+                        options: [
+                            "Rajin berlatih sedikit demi sedikit setiap hari",
+                            "Cukup baca buku tanpa pernah mengetik kode",
+                            "Hanya belajar setahun sekali",
+                            "Langsung menyerah kalau ada masalah"
+                        ],
+                        answer: 0,
+                        explanation: "TOP! Kunci sukses koding adalah konsistensi dan praktek langsung. Sedikit tapi rutin akan membuatmu makin jago!",
+                        tip: "Latihan terus bikin jarimu makin terbiasa mengetik kode!",
+                        output: "Kunci Sukses: Praktek Rutin"
+                    },
+                    {
+                        type: "tf",
+                        question: "🐍 Py:\n\"Benar atau Salah: File kodingan Python biasanya disimpan dengan akhiran ekstensi .py?\"",
+                        options: ["Benar", "Salah"],
+                        answer: 0,
+                        explanation: "Benar sekali! File Python selalu diakhiri dengan ekstensi .py, contohnya: programku.py.",
+                        tip: "Ekstensi .py memudahkan komputer mengenali file program Python!",
+                        output: "File: programku.py"
+                    },
+                    {
+                        type: "mc",
+                        question: "🐍 Py:\n\"Kamu sudah menyelesaikan materi dasar! Bagaimanakah perasaanmu belajar Python sejauh ini?\"",
+                        options: [
+                            "Seru banget dan makin penasaran bikin kode baru!",
+                            "Biasa saja",
+                            "Sangat membosankan",
+                            "Susah sekali"
+                        ],
+                        answer: 0,
+                        explanation: "Hore! Semangatmu luar biasa! Yuk teruskan petualanganmu ke bab-bab selanjutnya!",
+                        tip: "Kamu punya bakat jadi programmer hebat di masa depan!",
+                        output: "Status: Siap Jadi Programmer! 🚀"
+                    }
+                ]
+            },
+            {
+                title: "Angka & Matematika",
+                questions: [
+                    {
+                        type: "mc",
+                        question: "Berapakah hasil dari print(5 + 3 * 2)?",
+                        options: ["16", "11", "10", "13"],
+                        answer: 1,
+                        explanation: "Python mengikuti aturan urutan matematika (PEMDAS)! Perkalian dilakukan sebelum penjumlahan: 3 * 2 = 6, lalu 5 + 6 = 11.",
+                        tip: "Gunakan tanda kurung jika ingin penjumlahan dihitung terlebih dahulu: (5 + 3) * 2",
+                        output: "11"
+                    }
+                ]
+            }
+        ];
+
+        /* ----------------------------------------------------------------------
+           C. GAME STATE MANAGEMENT
+           ---------------------------------------------------------------------- */
+        let state = {
+            xp: 0,
+            coins: 0,
+            lives: 5,
+            currentChapter: 0,
+            currentQuestion: 0,
+            theme: 'light'
+        };
+
+        function loadState() {
+            const saved = localStorage.getItem('py_adventure_state');
+            if (saved) {
+                try { state = { ...state, ...JSON.parse(saved) }; } catch(e){}
+            }
+            updateUIStats();
+        }
+
+        function saveState() {
+            localStorage.setItem('py_adventure_state', JSON.stringify(state));
+        }
+
+        function updateUIStats() {
+            document.getElementById('xp-count').innerText = state.xp;
+            document.getElementById('coins-count').innerText = state.coins;
+            document.getElementById('lives-count').innerText = state.lives;
+
+            let level = "Telur Python";
+            if (state.xp >= 50) level = "Penjelajah Python";
+            if (state.xp >= 150) level = "Koder Python";
+            if (state.xp >= 300) level = "Pahlawan Python";
+            document.getElementById('level-name').innerText = level;
+        }
+
+        /* ----------------------------------------------------------------------
+           D. NAVIGATION & SCREEN CONTROLLER
+           ---------------------------------------------------------------------- */
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+        }
+
+        function goHome() {
+            showScreen('screen-home');
+        }
+
+        function startChapter(chapIdx) {
+            AudioEngine.click();
+            state.currentChapter = chapIdx;
+            state.currentQuestion = 0;
+            showScreen('screen-game');
+            renderQuestion();
+        }
+
+        function showLockedMessage() {
+            AudioEngine.wrong();
+            document.getElementById('lock-modal').classList.add('active');
+        }
+
+        function closeLockedMessage() {
+            AudioEngine.click();
+            document.getElementById('lock-modal').classList.remove('active');
+        }
+
+        /* ----------------------------------------------------------------------
+           E. QUESTION RENDERER & INTERACTION LOGIC
+           ---------------------------------------------------------------------- */
+        function renderQuestion() {
+            const chap = chapters[state.currentChapter];
+            const q = chap.questions[state.currentQuestion];
+
+            // Update Progress Bar
+            const progPercent = ((state.currentQuestion) / chap.questions.length) * 100;
+            document.getElementById('progress-bar').style.width = progPercent + '%';
+
+            // Hide explanation
+            document.getElementById('explanation-panel').style.display = 'none';
+
+            // Set mascot speech
+            setMascotState('normal', "Pikirkan dengan cermat dan pilih jawaban terbaik!");
+
+            document.getElementById('question-text').innerText = q.question;
+            const container = document.getElementById('question-interactive-container');
+            container.innerHTML = '';
+
+            if (q.type === 'mc' || q.type === 'tf') {
+                const grid = document.createElement('div');
+                grid.className = 'options-grid';
+                q.options.forEach((opt, idx) => {
+                    const btn = document.createElement('button');
+                    btn.className = 'option-btn';
+                    btn.innerText = opt;
+                    btn.onclick = () => checkAnswer(idx, btn);
+                    grid.appendChild(btn);
+                });
+                container.appendChild(grid);
+            } else if (q.type === 'typing') {
+                const codeDiv = document.createElement('div');
+                codeDiv.className = 'code-block';
+                codeDiv.innerText = q.codeSnippet;
+
+                const input = document.createElement('input');
+                input.className = 'input-code';
+                input.placeholder = 'Ketik kodemu di sini...';
+
+                const subBtn = document.createElement('button');
+                subBtn.className = 'btn';
+                subBtn.innerText = 'Kirim Jawaban';
+                subBtn.onclick = () => checkAnswer(input.value.trim(), subBtn);
+
+                container.appendChild(codeDiv);
+                container.appendChild(input);
+                container.appendChild(subBtn);
+            }
+        }
+
+        function checkAnswer(userAns, element) {
+            const chap = chapters[state.currentChapter];
+            const q = chap.questions[state.currentQuestion];
+            let isCorrect = false;
+
+            if (q.type === 'mc' || q.type === 'tf') {
+                isCorrect = (userAns === q.answer);
+            } else if (q.type === 'typing') {
+                isCorrect = (userAns.toLowerCase() === q.correctInput.toLowerCase());
+            }
+
+            if (isCorrect) {
+                AudioEngine.correct();
+                triggerConfetti();
+                if (element && element.classList) element.classList.add('correct');
+                setMascotState('happy', "Luar biasa! Jawabanmu benar sekali!");
+                state.xp += 20;
+                state.coins += 5;
+            } else {
+                AudioEngine.wrong();
+                if (element && element.classList) element.classList.add('wrong');
+                setMascotState('sad', "Ups! Jangan khawatir, dari kesalahan kita belajar!");
+                state.lives = Math.max(0, state.lives - 1);
+            }
+
+            updateUIStats();
+            saveState();
+
+            // Show explanation
+            document.getElementById('explanation-text').innerText = q.explanation;
+            document.getElementById('python-tip-text').innerText = q.tip;
+            document.getElementById('terminal-output').innerText = '> ' + q.output;
+            document.getElementById('explanation-panel').style.display = 'block';
+        }
+
+        function nextQuestion() {
+            AudioEngine.click();
+            const chap = chapters[state.currentChapter];
+            state.currentQuestion++;
+
+            if (state.currentQuestion >= chap.questions.length) {
+                showResultScreen();
+            } else {
+                renderQuestion();
+            }
+        }
+
+        function showResultScreen() {
+            document.getElementById('res-xp').innerText = '+60 XP';
+            document.getElementById('res-coins').innerText = '+15 Koin';
+            showScreen('screen-result');
+            triggerConfetti();
+        }
+
+        /* ----------------------------------------------------------------------
+           F. MASCOT DYNAMIC FACIAL EXPRESSIONS
+           ---------------------------------------------------------------------- */
+        function setMascotState(mood, speechText) {
+            const mouth = document.getElementById('mascot-mouth');
+            const speech = document.getElementById('game-speech');
+            speech.innerText = speechText;
+
+            if (mood === 'happy') {
+                mouth.setAttribute('d', 'M 30 55 Q 50 80 70 55');
+            } else if (mood === 'sad') {
+                mouth.setAttribute('d', 'M 35 65 Q 50 50 65 65');
+            } else {
+                mouth.setAttribute('d', 'M 35 60 Q 50 75 65 60');
+            }
+        }
+
+        /* ----------------------------------------------------------------------
+           G. BACKGROUND CANVAS & PARTICLES PHYSICS ENGINE
+           ---------------------------------------------------------------------- */
+        const bgCanvas = document.getElementById('bg-canvas');
+        const bgCtx = bgCanvas.getContext('2d');
+        let particles = [];
+
+        function resizeCanvas() {
+            bgCanvas.width = window.innerWidth;
+            bgCanvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        for(let i=0; i<25; i++) {
+            particles.push({
+                x: Math.random() * bgCanvas.width,
+                y: Math.random() * bgCanvas.height,
+                radius: Math.random() * 20 + 10,
+                color: `rgba(255, 255, 255, ${Math.random() * 0.3 + 0.1})`,
+                vx: (Math.random() - 0.5) * 0.8,
+                vy: (Math.random() - 0.5) * 0.8
+            });
+        }
+
+        function renderBG() {
+            bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
+            particles.forEach(p => {
+                p.x += p.vx;
+                p.y += p.vy;
+                if(p.x < 0 || p.x > bgCanvas.width) p.vx *= -1;
+                if(p.y < 0 || p.y > bgCanvas.height) p.vy *= -1;
+
+                bgCtx.beginPath();
+                bgCtx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                bgCtx.fillStyle = p.color;
+                bgCtx.fill();
+            });
+            requestAnimationFrame(renderBG);
+        }
+        renderBG();
+
+        /* ----------------------------------------------------------------------
+           H. CONFETTI BURST ENGINE
+           ---------------------------------------------------------------------- */
+        const confCanvas = document.getElementById('confetti-canvas');
+        const confCtx = confCanvas.getContext('2d');
+        let confetti = [];
+
+        function resizeConf() {
+            confCanvas.width = window.innerWidth;
+            confCanvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeConf);
+        resizeConf();
+
+        function triggerConfetti() {
+            for(let i=0; i<60; i++) {
+                confetti.push({
+                    x: confCanvas.width / 2,
+                    y: confCanvas.height / 2,
+                    vx: (Math.random() - 0.5) * 12,
+                    vy: (Math.random() - 0.8) * 12,
+                    size: Math.random() * 8 + 4,
+                    color: `hsl(${Math.random() * 360}, 80%, 60%)`,
+                    life: 100
+                });
+            }
+        }
+
+        function renderConfetti() {
+            confCtx.clearRect(0, 0, confCanvas.width, confCanvas.height);
+            confetti.forEach((c, idx) => {
+                c.x += c.vx;
+                c.y += c.vy;
+                c.vy += 0.2; // gravity
+                c.life--;
+
+                confCtx.fillStyle = c.color;
+                confCtx.fillRect(c.x, c.y, c.size, c.size);
+
+                if (c.life <= 0) confetti.splice(idx, 1);
+            });
+            requestAnimationFrame(renderConfetti);
+        }
+        renderConfetti();
+
+        /* ----------------------------------------------------------------------
+           I. THEME TOGGLE (DARK / LIGHT)
+           ---------------------------------------------------------------------- */
+        const themeBtn = document.getElementById('theme-btn');
+        themeBtn.onclick = () => {
+            AudioEngine.click();
+            const isDark = document.body.getAttribute('data-theme') === 'dark';
+            if (isDark) {
+                document.body.removeAttribute('data-theme');
+                themeBtn.innerText = '🌙';
+            } else {
+                document.body.setAttribute('data-theme', 'dark');
+                themeBtn.innerText = '☀️';
+            }
+        };
+
+        // Initialize state on boot
+        loadState();
+    </script>
+</body>
+</html>
