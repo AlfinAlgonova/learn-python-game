@@ -5,15 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Petualangan Python - Belajar Python dengan Seru!</title>
     <style>
-        /* ==========================================================================
-           1. CSS VARIABLES & THEMES
-           ========================================================================== */
         :root {
             --bg-gradient: linear-gradient(135deg, #a8edd9 0%, #fed6e3 100%);
-            --glass-bg: rgba(255, 255, 255, 0.65);
-            --glass-border: rgba(255, 255, 255, 0.8);
+            --glass-bg: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.85);
             --glass-shadow: 0 12px 32px 0 rgba(31, 38, 135, 0.12);
-            --card-bg: rgba(255, 255, 255, 0.85);
+            --card-bg: rgba(255, 255, 255, 0.88);
             --text-primary: #2d3748;
             --text-secondary: #4a5568;
             --accent-green: #48bb78;
@@ -32,10 +29,10 @@
 
         [data-theme="dark"] {
             --bg-gradient: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
-            --glass-bg: rgba(26, 32, 44, 0.75);
+            --glass-bg: rgba(26, 32, 44, 0.8);
             --glass-border: rgba(255, 255, 255, 0.15);
-            --glass-shadow: 0 12px 32px 0 rgba(0, 0, 0, 0.37);
-            --card-bg: rgba(45, 55, 72, 0.85);
+            --glass-shadow: 0 12px 32px 0 rgba(0, 0, 0, 0.4);
+            --card-bg: rgba(45, 55, 72, 0.9);
             --text-primary: #f7fafc;
             --text-secondary: #e2e8f0;
             --primary-button: #7f9cf5;
@@ -60,9 +57,6 @@
             transition: background 0.5s ease;
         }
 
-        /* ==========================================================================
-           2. CANVAS & BACKGROUND ANIMATIONS
-           ========================================================================== */
         #bg-canvas {
             position: fixed;
             top: 0;
@@ -86,7 +80,7 @@
         .app-container {
             position: relative;
             z-index: 1;
-            max-width: 1000px;
+            max-width: 900px;
             margin: 0 auto;
             padding: 20px;
             min-height: 100vh;
@@ -95,9 +89,6 @@
             justify-content: center;
         }
 
-        /* ==========================================================================
-           3. GLASSMORPHISM UI ELEMENTS
-           ========================================================================== */
         .glass-card {
             background: var(--card-bg);
             backdrop-filter: blur(12px);
@@ -137,9 +128,6 @@
             transform: translateY(1px) scale(0.98);
         }
 
-        /* ==========================================================================
-           4. HEADER & TOP NAV BAR
-           ========================================================================== */
         .top-bar {
             display: flex;
             justify-content: space-between;
@@ -176,9 +164,6 @@
         }
         .theme-toggle:hover { transform: rotate(20deg) scale(1.1); }
 
-        /* ==========================================================================
-           5. MASCOT PY & SPEECH BUBBLE
-           ========================================================================== */
         .mascot-container {
             display: flex;
             align-items: center;
@@ -194,9 +179,9 @@
             padding: 14px 20px;
             color: #2d3748;
             font-weight: bold;
-            font-size: 1.1rem;
+            font-size: 1.05rem;
             box-shadow: 0 6px 16px rgba(0,0,0,0.1);
-            max-width: 320px;
+            max-width: 420px;
             animation: float 3s ease-in-out infinite;
         }
 
@@ -216,12 +201,12 @@
             50% { transform: translateY(-8px); }
         }
 
-        /* SVG Animated Python Mascot */
         .py-mascot {
-            width: 100px;
-            height: 100px;
+            width: 90px;
+            height: 90px;
             filter: drop-shadow(0 6px 12px rgba(0,0,0,0.15));
             animation: mascotIdle 4s ease-in-out infinite;
+            flex-shrink: 0;
         }
 
         @keyframes mascotIdle {
@@ -229,9 +214,6 @@
             50% { transform: scale(1.05) rotate(3deg); }
         }
 
-        /* ==========================================================================
-           6. SCREENS: HOME / GAME / RESULT
-           ========================================================================== */
         .screen { display: none; }
         .screen.active { display: block; animation: fadeIn 0.4s ease-out; }
 
@@ -240,7 +222,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* HOME SCREEN */
         .home-card {
             text-align: center;
             padding: 40px 20px;
@@ -254,22 +235,22 @@
         }
         .chapter-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
             gap: 16px;
             margin: 30px 0;
         }
         .chapter-card {
-            background: rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.6);
             border: 2px solid var(--glass-border);
             border-radius: var(--radius-md);
-            padding: 18px;
+            padding: 20px;
             cursor: pointer;
             transition: all 0.3s ease;
             text-align: center;
         }
         .chapter-card:hover {
-            transform: translateY(-50px) scale(1.03);
-            background: rgba(255, 255, 255, 0.85);
+            transform: translateY(-5px) scale(1.02);
+            background: rgba(255, 255, 255, 0.9);
             box-shadow: 0 10px 20px rgba(0,0,0,0.1);
         }
         .chapter-card.locked {
@@ -279,16 +260,30 @@
         }
         .chapter-card.locked:hover {
             transform: none;
-            background: rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.6);
             box-shadow: none;
         }
 
-        /* QUESTION TYPES & INTERACTION */
         .question-text {
-            font-size: 1.3rem;
+            font-size: 1.25rem;
             font-weight: bold;
+            margin-bottom: 16px;
+            line-height: 1.5;
+        }
+
+        /* PYTHON CODE CONTAINER FOR QUESTIONS */
+        .python-code-box {
+            background: #1e1e2e;
+            color: #a6e3a1;
+            font-family: 'Consolas', 'Courier New', Courier, monospace;
+            padding: 16px 20px;
+            border-radius: var(--radius-md);
+            font-size: 1.2rem;
             margin-bottom: 20px;
-            line-height: 1.4;
+            border-left: 6px solid #89b4fa;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            white-space: pre-wrap;
+            word-break: break-word;
         }
 
         .options-grid {
@@ -303,7 +298,7 @@
         }
 
         .option-btn {
-            background: rgba(255, 255, 255, 0.7);
+            background: rgba(255, 255, 255, 0.75);
             border: 2px solid var(--glass-border);
             padding: 16px 20px;
             border-radius: var(--radius-md);
@@ -347,7 +342,6 @@
             100% { transform: scale(1); }
         }
 
-        /* CODE & TERMINAL EXPLANATION SECTION */
         .explanation-panel {
             margin-top: 20px;
             padding: 20px;
@@ -364,25 +358,23 @@
         }
 
         .terminal-box {
-            background: #1a202c;
-            color: #68d391;
-            font-family: 'Courier New', Courier, monospace;
+            background: #181825;
+            color: #a6e3a1;
+            font-family: 'Consolas', 'Courier New', Courier, monospace;
             padding: 14px;
             border-radius: var(--radius-sm);
-            margin-top: 10px;
+            margin-top: 12px;
             box-shadow: inset 0 2px 6px rgba(0,0,0,0.4);
-            position: relative;
         }
 
         .terminal-header {
             font-size: 0.75rem;
-            color: #a0aec0;
+            color: #9399b2;
             margin-bottom: 6px;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
 
-        /* PROGRESS BAR */
         .progress-container {
             width: 100%;
             height: 14px;
@@ -400,30 +392,6 @@
             border-radius: 10px;
         }
 
-        /* BADGES GRID */
-        .badges-grid {
-            display: flex;
-            justify-content: center;
-            gap: 14px;
-            flex-wrap: wrap;
-            margin: 20px 0;
-        }
-
-        .badge-item {
-            background: rgba(255, 255, 255, 0.6);
-            border-radius: 50%;
-            width: 70px;
-            height: 70px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.8rem;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            transition: transform 0.3s;
-        }
-        .badge-item:hover { transform: scale(1.15) rotate(10deg); }
-
-        /* CODES / TYPING EDITOR / DRAG DROP */
         .code-block {
             background: #2d3748;
             color: #f7fafc;
@@ -445,7 +413,6 @@
             outline: none;
         }
 
-        /* CUSTOM NOTIFICATION MODAL */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -494,7 +461,6 @@
                     Belajar coding seru bersama Py, sahabat Python kamu! 🐍
                 </p>
 
-                <!-- MASCOT DISPLAY -->
                 <div class="mascot-container" style="justify-content: center;">
                     <svg class="py-mascot" viewBox="0 0 100 100">
                         <circle cx="50" cy="50" r="40" fill="#48bb78" />
@@ -504,26 +470,29 @@
                         <circle cx="65" cy="40" r="3" fill="#000" />
                         <path d="M 35 60 Q 50 75 65 60" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round"/>
                     </svg>
-                    <div class="speech-bubble" id="home-speech">Siap jelajahi keajaiban koding Python hari ini?</div>
+                    <div class="speech-bubble" id="home-speech">Pilih Bab yang ingin kamu pelajari hari ini!</div>
                 </div>
 
                 <div class="chapter-grid">
                     <div class="chapter-card" onclick="startChapter(0)">
                         <h3>📜 Bab 1</h3>
                         <p>Pengenalan Python</p>
+                        <small style="color: var(--accent-green); font-weight: bold;">(20 Soal - Teracak)</small>
                     </div>
                     <div class="chapter-card" onclick="startChapter(1)">
                         <h3>🔢 Bab 2</h3>
-                        <p>Angka & Matematika</p>
+                        <p>Angka & Aritmatika</p>
+                        <small style="color: var(--accent-blue); font-weight: bold;">(20 Soal Kode Full)</small>
                     </div>
                     <div class="chapter-card locked" onclick="showLockedMessage()">
                         <h3>🔒 Bab 3</h3>
                         <p>Kondisional (If/Else)</p>
+                        <small style="color: var(--text-secondary);">Segera Hadir</small>
                     </div>
                 </div>
 
                 <button class="btn" style="font-size: 1.3rem; padding: 16px 36px;" onclick="startChapter(0)">
-                    🚀 Mulai Petualangan
+                    🚀 Mulai Dari Bab 1
                 </button>
             </div>
         </div>
@@ -544,12 +513,14 @@
                     <circle id="right-eye" cx="65" cy="40" r="3" fill="#000" />
                     <path id="mascot-mouth" d="M 35 60 Q 50 75 65 60" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round"/>
                 </svg>
-                <div class="speech-bubble" id="game-speech">Yuk, kita selesaikan kode ini bersama!</div>
+                <div class="speech-bubble" id="game-speech">Yuk, hitung kode ini bersama!</div>
             </div>
 
             <!-- QUESTION CARD -->
             <div class="glass-card" id="question-card">
                 <div class="question-text" id="question-text">Memuat pertanyaan...</div>
+
+                <div id="code-container"></div>
 
                 <div id="question-interactive-container">
                     <!-- Dynamic choices / input rendered here -->
@@ -565,7 +536,7 @@
                     </div>
 
                     <div class="terminal-box">
-                        <div class="terminal-header">Simulasi Hasil Terminal</div>
+                        <div class="terminal-header">Simulasi Output Terminal</div>
                         <div id="terminal-output">> Hasil akan muncul di sini...</div>
                     </div>
 
@@ -581,14 +552,8 @@
                 <p style="font-size: 1.2rem; color: var(--text-secondary);">Kamu makin jago jadi Penyihir Python!</p>
 
                 <div style="margin: 30px 0; font-size: 1.4rem; display: flex; justify-content: center; gap: 30px;">
-                    <div>⭐ <br><strong id="res-xp">+0 XP</strong></div>
-                    <div>🪙 <br><strong id="res-coins">+0 Koin</strong></div>
-                </div>
-
-                <div class="badges-grid" id="unlocked-badges">
-                    <div class="badge-item" title="Pembelajar Cepat">⚡</div>
-                    <div class="badge-item" title="Pahlawan Python">🐍</div>
-                    <div class="badge-item" title="Ninja Koding">🥷</div>
+                    <div>⭐ <br><strong id="res-xp">+100 XP</strong></div>
+                    <div>🪙 <br><strong id="res-coins">+25 Koin</strong></div>
                 </div>
 
                 <button class="btn" style="font-size: 1.2rem; margin-top: 20px;" onclick="goHome()">Kembali ke Halaman Utama</button>
@@ -601,18 +566,15 @@
         <div class="modal-card">
             <h2 style="margin-bottom: 10px; font-size: 1.8rem;">🔒 Terkunci</h2>
             <p style="font-size: 1.1rem; line-height: 1.5; color: var(--text-secondary); margin-bottom: 20px;">
-                Bab ini masih terkunci.<br>Selesaikan Bab 2 untuk membukanya.
+                Bab ini masih dalam pengembangan.<br>Selesaikan Bab 1 & Bab 2 terlebih dahulu!
             </p>
             <button class="btn" onclick="closeLockedMessage()">Mengerti!</button>
         </div>
     </div>
 
-    <!-- ==========================================================================
-       7. JAVASCRIPT LOGIC & AUDIO SYNTHESIZER
-       ========================================================================== -->
     <script>
         /* ----------------------------------------------------------------------
-           A. AUDIO SYNTHESIZER (Web Audio API - No External Files)
+           A. AUDIO SYNTHESIZER (Web Audio API)
            ---------------------------------------------------------------------- */
         const AudioEngine = {
             ctx: null,
@@ -647,7 +609,7 @@
         };
 
         /* ----------------------------------------------------------------------
-           B. QUESTION DATASET
+           B. QUESTION DATASETS (BALANCED RANDOMIZED ANSWERS)
            ---------------------------------------------------------------------- */
         const chapters = [
             {
@@ -657,12 +619,12 @@
                         type: "mc",
                         question: "🐍 Py:\n\"Halo! Aku Py. Menurutmu, apa sih sebenarnya Python itu?\"",
                         options: [
-                            "Bahasa pemrograman super keren buat bikin aplikasi",
                             "Ular sungguhan yang tinggal di dalam komputer",
                             "Nama merk makanan ringan",
+                            "Bahasa pemrograman super keren buat bikin aplikasi",
                             "Judul film animasi tentang binatang"
                         ],
-                        answer: 0,
+                        answer: 2, // C
                         explanation: "Hebat! Python adalah bahasa pemrograman yang digunakan untuk membuat game, website, AI, dan banyak hal keren lainnya!",
                         tip: "Python adalah salah satu bahasa koding paling populer di dunia!",
                         output: "Python = Bahasa Pemrograman"
@@ -671,12 +633,12 @@
                         type: "mc",
                         question: "🐍 Py:\n\"Kamu tahu gak, siapa pahlawan yang menciptakan bahasa Python pertama kali?\"",
                         options: [
-                            "Guido van Rossum",
                             "Albert Einstein",
+                            "Guido van Rossum",
                             "Steve Jobs",
-                            "SpongeBob SquarePants"
+                            "Elon Musk"
                         ],
-                        answer: 0,
+                        answer: 1, // B
                         explanation: "Keren banget! Guido van Rossum menciptakan Python pada tahun 1991 karena ingin bahasa koding yang mudah dibaca.",
                         tip: "Guido membuat Python agar semua orang bisa belajar koding dengan menyenangkan!",
                         output: "Pencipta: Guido van Rossum"
@@ -685,12 +647,12 @@
                         type: "mc",
                         question: "🐍 Py:\n\"Coba tebak, gambar hewan apa yang jadi logo resmiku?\"",
                         options: [
-                            "Dua ular berwarna biru dan kuning",
                             "Kucing hitam lucu",
+                            "Burung hantu pintar",
                             "Naga hijau raksasa",
-                            "Burung hantu pintar"
+                            "Dua ular berwarna biru dan kuning"
                         ],
-                        answer: 0,
+                        answer: 3, // D
                         explanation: "Tepat sekali! Logo Python menggambarkan dua ekor ular yang saling melingkar anggun.",
                         tip: "Warna khas Python adalah kombinasi biru dan kuning!",
                         output: "Logo: 🐍 Ular Biru & Kuning"
@@ -704,7 +666,7 @@
                             "Sangat rumit dan susah dibaca",
                             "Hanya bisa dipakai malam hari"
                         ],
-                        answer: 0,
+                        answer: 0, // A
                         explanation: "Pintar! Kode Python dibuat sangat ringkas dan mudah dipahami, mirip membaca kalimat bahasa Inggris sehari-hari.",
                         tip: "Koding Python itu gak bikin pusing karena perintahnya singkat!",
                         output: "Kelebihan: Simpel & Mudah Dibaca"
@@ -713,12 +675,12 @@
                         type: "mc",
                         question: "🐍 Py:\n\"Wah, teknologi AI seperti ChatGPT makin canggih! Bahasa apa yang dipakai buat bikin AI?\"",
                         options: [
-                            "Python",
-                            "Bahasa Isyarat",
                             "HTML biasa",
+                            "Bahasa Isyarat",
+                            "Python",
                             "Microsoft Paint"
                         ],
-                        answer: 0,
+                        answer: 2, // C
                         explanation: "Luar biasa! Python adalah bahasa utama dalam dunia Kecerdasan Buatan (AI) dan Machine Learning.",
                         tip: "Banyak robot dan sistem AI pintar diprogram menggunakan Python!",
                         output: "Bidang: AI & Kecerdasan Buatan"
@@ -727,12 +689,12 @@
                         type: "mc",
                         question: "🐍 Py:\n\"Selain AI, kira-kira Python bisa dipakai untuk membuat apa lagi ya?\"",
                         options: [
-                            "Game, website, dan analisis data",
                             "Hanya untuk menghitung kalkulator",
+                            "Game, website, dan analisis data",
                             "Membuat kue di dapur",
                             "Menggambar di kertas polos"
                         ],
-                        answer: 0,
+                        answer: 1, // B
                         explanation: "Luar biasa! Python itu serba bisa. Kamu bisa bikin website keren, game seru, hingga mengolah data raksasa!",
                         tip: "Situs besar seperti YouTube dan Instagram juga menggunakan Python!",
                         output: "Kegunaan: Game + Website + Data"
@@ -741,12 +703,12 @@
                         type: "mc",
                         question: "🐍 Py:\n\"Aplikasi populer mana nih yang menggunakan Python di sistem backend mereka?\"",
                         options: [
-                            "YouTube & Instagram",
-                            "Buku Tulis Sekolah",
                             "Papan Tulis Kapur",
-                            "Kaset Pita Jadul"
+                            "Buku Tulis Sekolah",
+                            "Kaset Pita Jadul",
+                            "YouTube & Instagram"
                         ],
-                        answer: 0,
+                        answer: 3, // D
                         explanation: "Mantap! Perusahaan raksasa seperti Instagram, YouTube, dan Spotify mengandalkan Python.",
                         tip: "Belajar Python membuka peluang besar untuk bikin aplikasi terkenal!",
                         output: "Pengguna: Instagram & YouTube"
@@ -769,7 +731,7 @@
                             "Aku Lupa Kode",
                             "Permisi Numpang Lewat"
                         ],
-                        answer: 0,
+                        answer: 0, // A
                         explanation: "Super! 'Hello World' adalah ucapan salam tradisi wajib bagi semua programmer di dunia saat baru belajar!",
                         tip: "Mencetak Hello World adalah langkah pertamamu jadi programmer hebat!",
                         output: "Hello World"
@@ -778,12 +740,12 @@
                         type: "mc",
                         question: "🐍 Py:\n\"Bagaimana cara penulisan perintah cetak yang BENAR di Python?\"",
                         options: [
-                            "print(\"Halo\")",
                             "PRINT(\"Halo\")",
                             "Print[\"Halo\"]",
+                            "print(\"Halo\")",
                             "cetak(\"Halo\")"
                         ],
-                        answer: 0,
+                        answer: 2, // C
                         explanation: "Joss! Python itu sensitif huruf besar-kecil (case-sensitive), jadi wajib pakai huruf kecil 'print' dan tanda kurung ().",
                         tip: "Perhatikan tanda petik dan kurungnya, jangan sampai ketinggalan!",
                         output: "Halo"
@@ -792,12 +754,12 @@
                         type: "mc",
                         question: "🐍 Py:\n\"Sebenarnya, apa sih yang dimaksud dengan 'Coding' atau Koding itu?\"",
                         options: [
-                            "Memberikan langkah instruksi ke komputer pakai bahasa khusus",
                             "Membongkar mesin komputer sampai rusak",
+                            "Memberikan langkah instruksi ke komputer pakai bahasa khusus",
                             "Bermain game seharian tanpa batas",
                             "Ketik acak tombol keyboard secepat mungkin"
                         ],
-                        answer: 0,
+                        answer: 1, // B
                         explanation: "Benar sekali! Koding adalah cara kita berkomunikasi dan memberi perintah langkah demi langkah kepada komputer.",
                         tip: "Komputer itu penurut, ia akan melakukan persis apa yang kamu koding!",
                         output: "Koding = Instruksi Komputer"
@@ -806,12 +768,12 @@
                         type: "mc",
                         question: "🐍 Py:\n\"Siapa yang menerjemahkan kodingan Python kita agar dimengerti mesin komputer?\"",
                         options: [
-                            "Interpreter Python",
-                            "Kamus Bahasa Inggris",
                             "Mesin Ketik Manual",
-                            "Kalkulator Saku"
+                            "Kamus Bahasa Inggris",
+                            "Kalkulator Saku",
+                            "Interpreter Python"
                         ],
-                        answer: 0,
+                        answer: 3, // D
                         explanation: "Hebat! Interpreter membaca kode Python kita baris demi baris lalu menerjemahkannya ke bahasa mesin.",
                         tip: "Interpreter bekerja sangat cepat hanya dalam hitungan detik!",
                         output: "Penerjemah: Interpreter"
@@ -820,7 +782,7 @@
                         type: "tf",
                         question: "🐍 Py:\n\"Benar atau Salah: Belajar koding itu harus jago banget matematika rumit?\"",
                         options: ["Benar", "Salah"],
-                        answer: 1,
+                        answer: 1, // Salah
                         explanation: "Tentu Salah! Yang paling penting dalam koding adalah logika berpikir dan kreativitas memecahkan masalah.",
                         tip: "Siapa saja bisa belajar koding, yang penting mau mencoba dan berlatih!",
                         output: "Kreativitas > Rumus Rumit"
@@ -834,7 +796,7 @@
                             "Langsung membuang laptop ke tempat sampah",
                             "Benci koding selamanya"
                         ],
-                        answer: 0,
+                        answer: 0, // A
                         explanation: "Sip! Error adalah teman baik programmer. Pesan error memberi tahu di mana letak perbaikan kode kita.",
                         tip: "Membetulkan error dinamakan 'Debugging'. Senang rasanya kalau berhasil!",
                         output: "Error = Kesempatan Belajar"
@@ -843,12 +805,12 @@
                         type: "mc",
                         question: "🐍 Py:\n\"Istilah keren untuk mencari dan memperbaiki kesalahan kode (error) adalah...\"",
                         options: [
-                            "Debugging",
                             "Sleeping",
                             "Shopping",
+                            "Debugging",
                             "Dancing"
                         ],
-                        answer: 0,
+                        answer: 2, // C
                         explanation: "Tepat! 'Debugging' berasal dari kata 'bug' (serangga). Dulu ada serangga asli yang bikin mesin komputer error!",
                         tip: "Jadilah detektif kode yang jago melakukan Debugging!",
                         output: "Proses: Debugging"
@@ -857,12 +819,12 @@
                         type: "mc",
                         question: "🐍 Py:\n\"Tanda apa yang digunakan untuk mengapit teks di dalam perintah print() Python?\"",
                         options: [
+                            "Tanda pagar (#)",
                             "Tanda petik, seperti \"Teks\" atau 'Teks'",
                             "Tanda sama dengan (=)",
-                            "Tanda tambah (+)",
-                            "Tanda pagar (#)"
+                            "Tanda tambah (+)"
                         ],
-                        answer: 0,
+                        answer: 1, // B
                         explanation: "Keren! Teks di Python (String) diapit oleh tanda petik tunggal '...' atau petik ganda \"...\".",
                         tip: "Pastikan tanda petiknya dibuka dan ditutup dengan serasi ya!",
                         output: "\"Teks Terapit Petik\""
@@ -871,12 +833,12 @@
                         type: "mc",
                         question: "🐍 Py:\n\"Kalau kita ingin membuat game 2D seru di Python, library apa yang sangat terkenal?\"",
                         options: [
-                            "Pygame",
                             "PyFood",
+                            "PyPark",
                             "PySleep",
-                            "PyPark"
+                            "Pygame"
                         ],
-                        answer: 0,
+                        answer: 3, // D
                         explanation: "Luar biasa! Pygame adalah modul favorit untuk membuat grafik, suara, dan kontrol game dengan Python.",
                         tip: "Nanti kamu bisa bikin game buatanmu sendiri pakai Pygame!",
                         output: "Modul Game: Pygame"
@@ -890,7 +852,7 @@
                             "Hanya belajar setahun sekali",
                             "Langsung menyerah kalau ada masalah"
                         ],
-                        answer: 0,
+                        answer: 0, // A
                         explanation: "TOP! Kunci sukses koding adalah konsistensi dan praktek langsung. Sedikit tapi rutin akan membuatmu makin jago!",
                         tip: "Latihan terus bikin jarimu makin terbiasa mengetik kode!",
                         output: "Kunci Sukses: Praktek Rutin"
@@ -899,7 +861,7 @@
                         type: "tf",
                         question: "🐍 Py:\n\"Benar atau Salah: File kodingan Python biasanya disimpan dengan akhiran ekstensi .py?\"",
                         options: ["Benar", "Salah"],
-                        answer: 0,
+                        answer: 0, // Benar
                         explanation: "Benar sekali! File Python selalu diakhiri dengan ekstensi .py, contohnya: programku.py.",
                         tip: "Ekstensi .py memudahkan komputer mengenali file program Python!",
                         output: "File: programku.py"
@@ -908,12 +870,12 @@
                         type: "mc",
                         question: "🐍 Py:\n\"Kamu sudah menyelesaikan materi dasar! Bagaimanakah perasaanmu belajar Python sejauh ini?\"",
                         options: [
-                            "Seru banget dan makin penasaran bikin kode baru!",
                             "Biasa saja",
                             "Sangat membosankan",
+                            "Seru banget dan makin penasaran bikin kode baru!",
                             "Susah sekali"
                         ],
-                        answer: 0,
+                        answer: 2, // C
                         explanation: "Hore! Semangatmu luar biasa! Yuk teruskan petualanganmu ke bab-bab selanjutnya!",
                         tip: "Kamu punya bakat jadi programmer hebat di masa depan!",
                         output: "Status: Siap Jadi Programmer! 🚀"
@@ -921,16 +883,207 @@
                 ]
             },
             {
-                title: "Angka & Matematika",
+                title: "Angka & Aritmatika",
                 questions: [
                     {
                         type: "mc",
-                        question: "Berapakah hasil dari print(5 + 3 * 2)?",
-                        options: ["16", "11", "10", "13"],
-                        answer: 1,
-                        explanation: "Python mengikuti aturan urutan matematika (PEMDAS)! Perkalian dilakukan sebelum penjumlahan: 3 * 2 = 6, lalu 5 + 6 = 11.",
-                        tip: "Gunakan tanda kurung jika ingin penjumlahan dihitung terlebih dahulu: (5 + 3) * 2",
-                        output: "11"
+                        question: "Apa hasil terminal dari kode berikut?",
+                        code: "print(5 * 10 + 10)",
+                        options: ["A. 100", "B. 60", "C. 50", "D. 70"],
+                        answer: 1, // B
+                        explanation: "Operasi perkalian (5 * 10 = 50) dikerjakan terlebih dahulu, lalu ditambahkan 10 sehingga hasilnya 60.",
+                        tip: "Perkalian (*) punya prioritas lebih tinggi daripada penjumlahan (+).",
+                        output: "60"
+                    },
+                    {
+                        type: "mc",
+                        question: "Berapakah output dari kode ini?",
+                        code: "print(100 - 25 * 2)",
+                        options: ["A. 50", "B. 150", "C. 75", "D. 0"],
+                        answer: 0, // A
+                        explanation: "Perkalian 25 * 2 = 50 dikerjakan dulu. Lalu 100 - 50 = 50.",
+                        tip: "Selalu dahulukan perkalian sebelum pengurangan!",
+                        output: "50"
+                    },
+                    {
+                        type: "mc",
+                        question: "Apa tipe data dan hasil dari kode pembagian berikut?",
+                        code: "print(20 / 4)",
+                        options: ["A. 5", "B. 4.0", "C. 5.0", "D. 5.5"],
+                        answer: 2, // C
+                        explanation: "Pembagian satu garis miring / di Python selalu menghasilkan tipe data float (angka desimal: 5.0).",
+                        tip: "Di Python, operator / selalu menghasilkan tipe float!",
+                        output: "5.0"
+                    },
+                    {
+                        type: "mc",
+                        question: "Berapa hasil dari pembagian bulat (floor division) berikut?",
+                        code: "print(17 // 3)",
+                        options: ["A. 5.66", "B. 5.0", "C. 6", "D. 5"],
+                        answer: 3, // D
+                        explanation: "Operator // membuang angka desimal di belakang koma (17 / 3 = 5.66 -> dibulatkan ke bawah jadi 5).",
+                        tip: "Floor division // membulatkan hasil ke bawah ke bilangan bulat terdekat.",
+                        output: "5"
+                    },
+                    {
+                        type: "mc",
+                        question: "Apa output dari operasi modulo (sisa bagi) berikut?",
+                        code: "print(21 % 5)",
+                        options: ["A. 1", "B. 4", "C. 2", "D. 0"],
+                        answer: 0, // A
+                        explanation: "21 dibagi 5 adalah 4 sisa 1. Operator modulo % mengambil sisa baginya, yaitu 1.",
+                        tip: "Modulo % berguna untuk mengecek angka genap/ganjil atau sisa pembagian!",
+                        output: "1"
+                    },
+                    {
+                        type: "mc",
+                        question: "Apa hasil dari perintah perpangkatan berikut?",
+                        code: "print(3 ** 3)",
+                        options: ["A. 9", "B. 27", "C. 81", "D. 18"],
+                        answer: 1, // B
+                        explanation: "Operator ** adalah pangkat. 3 ** 3 artinya 3 * 3 * 3 = 27.",
+                        tip: "Gunakan ** untuk menghitung pangkat di Python!",
+                        output: "27"
+                    },
+                    {
+                        type: "mc",
+                        question: "Berapa nilai yang dicetak oleh kode di bawah ini?",
+                        code: "a = 15\nb = 4\nprint(a * b - 10)",
+                        options: ["A. 30", "B. 40", "C. 50", "D. 60"],
+                        answer: 2, // C
+                        explanation: "Variabel a * b = 15 * 4 = 60, lalu dikurangi 10 menjadi 50.",
+                        tip: "Variabel menyimpan nilai yang bisa dihitung dengan operasi matematika.",
+                        output: "50"
+                    },
+                    {
+                        type: "mc",
+                        question: "Berapa hasil dari eksekusi kode dengan tanda kurung ini?",
+                        code: "print((10 + 5) * (8 - 4))",
+                        options: ["A. 30", "B. 45", "C. 120", "D. 60"],
+                        answer: 3, // D
+                        explanation: "Operasi di dalam tanda kurung dikerjakan dulu: (15) * (4) = 60.",
+                        tip: "Tanda kurung () selalu dihitung paling pertama!",
+                        output: "60"
+                    },
+                    {
+                        type: "mc",
+                        question: "Berapakah nilai x yang dicetak di terminal?",
+                        code: "x = 10\nx = x + 5\nprint(x * 2)",
+                        options: ["A. 30", "B. 20", "C. 25", "D. 35"],
+                        answer: 0, // A
+                        explanation: "Nilai awal x = 10, lalu x diubah menjadi 10 + 5 = 15. Terakhir 15 * 2 = 30.",
+                        tip: "Perintah x = x + 5 memperbarui nilai variabel x.",
+                        output: "30"
+                    },
+                    {
+                        type: "mc",
+                        question: "Berapa hasil dari kombinasi penjumlahan dan floor division ini?",
+                        code: "print(10 + 15 // 2)",
+                        options: ["A. 12.5", "B. 17", "C. 17.5", "D. 12"],
+                        answer: 1, // B
+                        explanation: "Floor division 15 // 2 dihitung dulu yaitu 7. Lalu 10 + 7 = 17.",
+                        tip: "Floor division // lebih kuat urutannya daripada penjumlahan +.",
+                        output: "17"
+                    },
+                    {
+                        type: "mc",
+                        question: "Apa output dari ekspresi matematika berikut di Python?",
+                        code: "print(50 - 10 * 2 + 5)",
+                        options: ["A. 85", "B. 30", "C. 35", "D. 25"],
+                        answer: 2, // C
+                        explanation: "Perkalian dulu: 10 * 2 = 20. Pengurangan dan penjumlahan selevel dari kiri ke kanan: 50 - 20 + 5 = 35.",
+                        tip: "Operasi selevel (+ dan -) dihitung urut dari kiri ke kanan.",
+                        output: "35"
+                    },
+                    {
+                        type: "mc",
+                        question: "Berapa hasil penjumlahan dua perpangkatan ini?",
+                        code: "print(2 ** 4 + 4 ** 2)",
+                        options: ["A. 16", "B. 24", "C. 64", "D. 32"],
+                        answer: 3, // D
+                        explanation: "2 ** 4 = 16 dan 4 ** 2 = 16. Hasilnya 16 + 16 = 32.",
+                        tip: "Operator pangkat ** dikerjakan lebih dahulu sebelum +.",
+                        output: "32"
+                    },
+                    {
+                        type: "mc",
+                        question: "Berapakah sisa hasil bagi dari kode berikut?",
+                        code: "print(100 % 30)",
+                        options: ["A. 10", "B. 3", "C. 30", "D. 0"],
+                        answer: 0, // A
+                        explanation: "100 dibagi 30 dapat 3 dengan sisa 10. Maka 100 % 30 bernilai 10.",
+                        tip: "Modulo berguna untuk mencari sisa bagian!",
+                        output: "10"
+                    },
+                    {
+                        type: "mc",
+                        question: "Berapa hasil perhitungan angka desimal (float) ini?",
+                        code: "print(4.5 + 2.5 * 2)",
+                        options: ["A. 14.0", "B. 9.5", "C. 9.0", "D. 11.5"],
+                        answer: 1, // B
+                        explanation: "Perkalian 2.5 * 2 = 5.0, lalu ditambahkan 4.5 + 5.0 = 9.5.",
+                        tip: "Penjumlahan dengan float menghasilkan angka float desimal.",
+                        output: "9.5"
+                    },
+                    {
+                        type: "mc",
+                        question: "Apa hasil dari kode gabungan pembagian desimal dan bulat ini?",
+                        code: "a = 8\nb = 2\nprint(a / b + a // b)",
+                        options: ["A. 8", "B. 4.0", "C. 8.0", "D. 12.0"],
+                        answer: 2, // C
+                        explanation: "8 / 2 = 4.0 (float) dan 8 // 2 = 4 (int). Hasil 4.0 + 4 = 8.0 (float).",
+                        tip: "Menggabungkan float + int akan menghasilkan tipe float!",
+                        output: "8.0"
+                    },
+                    {
+                        type: "mc",
+                        question: "Berapa output dari perhitungan angka negatif berikut?",
+                        code: "print(-10 + 25)",
+                        options: ["A. -35", "B. -15", "C. 35", "D. 15"],
+                        answer: 3, // D
+                        explanation: "-10 + 25 = 15.",
+                        tip: "Python mendukung perhitungan angka negatif dengan sangat baik.",
+                        output: "15"
+                    },
+                    {
+                        type: "mc",
+                        question: "Apa hasil dari urutan operasi matematika berikut?",
+                        code: "print(12 * 3 % 5)",
+                        options: ["A. 1", "B. 2", "C. 3", "D. 0"],
+                        answer: 0, // A
+                        explanation: "Dikerjakan dari kiri ke kanan: 12 * 3 = 36. Lalu 36 % 5 = 1.",
+                        tip: "Perkalian dan Modulo memiliki tingkat prioritas selevel, dihitung dari kiri.",
+                        output: "1"
+                    },
+                    {
+                        type: "mc",
+                        question: "Apa output dari variabel pangkat ini?",
+                        code: "x = 5\ny = 3\nprint(x ** y)",
+                        options: ["A. 15", "B. 125", "C. 243", "D. 8"],
+                        answer: 1, // B
+                        explanation: "x ** y artinya 5 ** 3 = 5 * 5 * 5 = 125.",
+                        tip: "5 pangkat 3 hasilnya adalah 125.",
+                        output: "125"
+                    },
+                    {
+                        type: "mc",
+                        question: "Berapakah hasil akhir dari kode berikut?",
+                        code: "print(10 * (5 + 2) // 3)",
+                        options: ["A. 23.33", "B. 23.0", "C. 23", "D. 24"],
+                        answer: 2, // C
+                        explanation: "Tanda kurung dulu: 5 + 2 = 7. Lalu 10 * 7 = 70. Terakhir floor division 70 // 3 = 23.",
+                        tip: "Urutan: Kurung -> Perkalian -> Floor Division.",
+                        output: "23"
+                    },
+                    {
+                        type: "mc",
+                        question: "Berapa output dari pembagian beruntun berikut?",
+                        code: "print(100 / 10 / 2)",
+                        options: ["A. 20.0", "B. 5", "C. 25.0", "D. 5.0"],
+                        answer: 3, // D
+                        explanation: "Dikerjakan dari kiri ke kanan: 100 / 10 = 10.0, lalu 10.0 / 2 = 5.0.",
+                        tip: "Operasi pembagian beruntun dihitung urut dari sebelah kiri.",
+                        output: "5.0"
                     }
                 ]
             }
@@ -966,9 +1119,9 @@
             document.getElementById('lives-count').innerText = state.lives;
 
             let level = "Telur Python";
-            if (state.xp >= 50) level = "Penjelajah Python";
-            if (state.xp >= 150) level = "Koder Python";
-            if (state.xp >= 300) level = "Pahlawan Python";
+            if (state.xp >= 100) level = "Penjelajah Python";
+            if (state.xp >= 250) level = "Koder Python";
+            if (state.xp >= 500) level = "Pahlawan Python";
             document.getElementById('level-name').innerText = level;
         }
 
@@ -1017,9 +1170,19 @@
             document.getElementById('explanation-panel').style.display = 'none';
 
             // Set mascot speech
-            setMascotState('normal', "Pikirkan dengan cermat dan pilih jawaban terbaik!");
+            setMascotState('normal', "Hitung atau pikirkan jawaban kodingannya dengan teliti ya!");
 
-            document.getElementById('question-text').innerText = q.question;
+            document.getElementById('question-text').innerText = `Soal ${state.currentQuestion + 1} / ${chap.questions.length}: ${q.question}`;
+
+            const codeContainer = document.getElementById('code-container');
+            codeContainer.innerHTML = '';
+            if (q.code) {
+                const codeBox = document.createElement('div');
+                codeBox.className = 'python-code-box';
+                codeBox.innerText = q.code;
+                codeContainer.appendChild(codeBox);
+            }
+
             const container = document.getElementById('question-interactive-container');
             container.innerHTML = '';
 
@@ -1065,17 +1228,20 @@
                 isCorrect = (userAns.toLowerCase() === q.correctInput.toLowerCase());
             }
 
+            // Disable all option buttons after answer
+            document.querySelectorAll('.option-btn').forEach(btn => btn.disabled = true);
+
             if (isCorrect) {
                 AudioEngine.correct();
                 triggerConfetti();
                 if (element && element.classList) element.classList.add('correct');
-                setMascotState('happy', "Luar biasa! Jawabanmu benar sekali!");
-                state.xp += 20;
+                setMascotState('happy', "Hebat banget! Jawabanmu 100% Benar!");
+                state.xp += 15;
                 state.coins += 5;
             } else {
                 AudioEngine.wrong();
                 if (element && element.classList) element.classList.add('wrong');
-                setMascotState('sad', "Ups! Jangan khawatir, dari kesalahan kita belajar!");
+                setMascotState('sad', "Aduh, belum tepat! Yuk pelajari penjelasannya di bawah ini.");
                 state.lives = Math.max(0, state.lives - 1);
             }
 
@@ -1102,8 +1268,8 @@
         }
 
         function showResultScreen() {
-            document.getElementById('res-xp').innerText = '+60 XP';
-            document.getElementById('res-coins').innerText = '+15 Koin';
+            document.getElementById('res-xp').innerText = '+100 XP';
+            document.getElementById('res-coins').innerText = '+25 Koin';
             showScreen('screen-result');
             triggerConfetti();
         }
@@ -1114,19 +1280,21 @@
         function setMascotState(mood, speechText) {
             const mouth = document.getElementById('mascot-mouth');
             const speech = document.getElementById('game-speech');
-            speech.innerText = speechText;
+            if (speech) speech.innerText = speechText;
 
-            if (mood === 'happy') {
-                mouth.setAttribute('d', 'M 30 55 Q 50 80 70 55');
-            } else if (mood === 'sad') {
-                mouth.setAttribute('d', 'M 35 65 Q 50 50 65 65');
-            } else {
-                mouth.setAttribute('d', 'M 35 60 Q 50 75 65 60');
+            if (mouth) {
+                if (mood === 'happy') {
+                    mouth.setAttribute('d', 'M 30 55 Q 50 80 70 55');
+                } else if (mood === 'sad') {
+                    mouth.setAttribute('d', 'M 35 65 Q 50 50 65 65');
+                } else {
+                    mouth.setAttribute('d', 'M 35 60 Q 50 75 65 60');
+                }
             }
         }
 
         /* ----------------------------------------------------------------------
-           G. BACKGROUND CANVAS & PARTICLES PHYSICS ENGINE
+           G. BACKGROUND CANVAS PARTICLES
            ---------------------------------------------------------------------- */
         const bgCanvas = document.getElementById('bg-canvas');
         const bgCtx = bgCanvas.getContext('2d');
@@ -1200,7 +1368,7 @@
             confetti.forEach((c, idx) => {
                 c.x += c.vx;
                 c.y += c.vy;
-                c.vy += 0.2; // gravity
+                c.vy += 0.2;
                 c.life--;
 
                 confCtx.fillStyle = c.color;
@@ -1213,7 +1381,7 @@
         renderConfetti();
 
         /* ----------------------------------------------------------------------
-           I. THEME TOGGLE (DARK / LIGHT)
+           I. THEME TOGGLE & INITIALIZATION
            ---------------------------------------------------------------------- */
         const themeBtn = document.getElementById('theme-btn');
         themeBtn.onclick = () => {
@@ -1228,8 +1396,10 @@
             }
         };
 
-        // Initialize state on boot
-        loadState();
+        // Initialize state on window load
+        window.onload = function() {
+            loadState();
+        };
     </script>
 </body>
 </html>
