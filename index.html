@@ -253,22 +253,13 @@
             background: rgba(255, 255, 255, 0.9);
             box-shadow: 0 10px 20px rgba(0,0,0,0.1);
         }
-        .chapter-card.locked {
-            opacity: 0.6;
-            cursor: not-allowed;
-            filter: grayscale(0.5);
-        }
-        .chapter-card.locked:hover {
-            transform: none;
-            background: rgba(255, 255, 255, 0.6);
-            box-shadow: none;
-        }
 
         .question-text {
             font-size: 1.25rem;
             font-weight: bold;
             margin-bottom: 16px;
             line-height: 1.5;
+            white-space: pre-line;
         }
 
         /* PYTHON CODE CONTAINER FOR QUESTIONS */
@@ -412,30 +403,6 @@
             margin-bottom: 14px;
             outline: none;
         }
-
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(4px);
-            z-index: 200;
-            display: none;
-            justify-content: center;
-            align-items: center;
-        }
-        .modal-overlay.active { display: flex; animation: fadeIn 0.3s ease; }
-        .modal-card {
-            background: var(--card-bg);
-            border: 2px solid var(--glass-border);
-            border-radius: var(--radius-lg);
-            padding: 24px 32px;
-            text-align: center;
-            max-width: 400px;
-            box-shadow: var(--glass-shadow);
-        }
     </style>
 </head>
 <body>
@@ -484,10 +451,10 @@
                         <p>Angka & Aritmatika</p>
                         <small style="color: var(--accent-blue); font-weight: bold;">(20 Soal Kode Full)</small>
                     </div>
-                    <div class="chapter-card locked" onclick="showLockedMessage()">
-                        <h3>🔒 Bab 3</h3>
-                        <p>Kondisional (If/Else)</p>
-                        <small style="color: var(--text-secondary);">Segera Hadir</small>
+                    <div class="chapter-card" onclick="startChapter(2)">
+                        <h3>🌳 Bab 3</h3>
+                        <p>Hutan Variabel</p>
+                        <small style="color: var(--accent-green); font-weight: bold;">(20 Soal - Teracak)</small>
                     </div>
                 </div>
 
@@ -561,17 +528,6 @@
         </div>
     </div>
 
-    <!-- LOCK NOTIFICATION MODAL -->
-    <div class="modal-overlay" id="lock-modal">
-        <div class="modal-card">
-            <h2 style="margin-bottom: 10px; font-size: 1.8rem;">🔒 Terkunci</h2>
-            <p style="font-size: 1.1rem; line-height: 1.5; color: var(--text-secondary); margin-bottom: 20px;">
-                Bab ini masih dalam pengembangan.<br>Selesaikan Bab 1 & Bab 2 terlebih dahulu!
-            </p>
-            <button class="btn" onclick="closeLockedMessage()">Mengerti!</button>
-        </div>
-    </div>
-
     <script>
         /* ----------------------------------------------------------------------
            A. AUDIO SYNTHESIZER (Web Audio API)
@@ -611,6 +567,239 @@
         /* ----------------------------------------------------------------------
            B. QUESTION DATASETS (BALANCED RANDOMIZED ANSWERS)
            ---------------------------------------------------------------------- */
+        const chapter3QuestionsRaw = [
+            {
+                question: "🐍 Py berkata: Di dunia Python, variabel digunakan untuk...",
+                options: [
+                    "Menggambar gambar",
+                    "Menyimpan data",
+                    "Menghapus program",
+                    "Menutup aplikasi"
+                ],
+                answer: 1,
+                explanation: "Variabel adalah tempat untuk menyimpan data agar bisa digunakan kembali."
+            },
+            {
+                question: "Mana yang merupakan variabel?",
+                options: [
+                    "100",
+                    "\"Halo\"",
+                    "nama",
+                    "+"
+                ],
+                answer: 2,
+                explanation: "nama adalah nama variabel yang dapat menyimpan data."
+            },
+            {
+                question: "Jika ditulis:\nnama = 'Budi'\nApa isi variabel nama?",
+                options: [
+                    "nama",
+                    "Budi",
+                    "\"nama\"",
+                    "Python"
+                ],
+                answer: 1,
+                explanation: "Variabel nama menyimpan nilai Budi."
+            },
+            {
+                question: "Jika ditulis:\numur = 12\nNilai variabel umur adalah...",
+                options: [
+                    "umur",
+                    "dua belas",
+                    "12",
+                    "Python"
+                ],
+                answer: 2,
+                explanation: "Variabel umur menyimpan angka 12."
+            },
+            {
+                question: "Py menemukan peti harta.\nemas = 50\nBerapa jumlah emas yang disimpan?",
+                options: [
+                    "0",
+                    "5",
+                    "50",
+                    "500"
+                ],
+                answer: 2,
+                explanation: "Variabel emas menyimpan nilai 50."
+            },
+            {
+                question: "Apa fungsi tanda = pada variabel?",
+                options: [
+                    "Menampilkan data",
+                    "Menyimpan nilai ke variabel",
+                    "Menghapus data",
+                    "Menggambar gambar"
+                ],
+                answer: 1,
+                explanation: "Tanda = digunakan untuk memberikan nilai ke variabel."
+            },
+            {
+                question: "Mana nama variabel yang baik?",
+                options: [
+                    "nama_siswa",
+                    "123nama",
+                    "@nama",
+                    "nama siswa"
+                ],
+                answer: 0,
+                explanation: "Nama variabel tidak boleh diawali angka dan tidak boleh mengandung spasi."
+            },
+            {
+                question: "hp = 100\nApa nama variabelnya?",
+                options: [
+                    "100",
+                    "hp",
+                    "=",
+                    "Python"
+                ],
+                answer: 1,
+                explanation: "hp adalah nama variabel."
+            },
+            {
+                question: "skor = 10\nskor = 20\nBerapa nilai akhirnya?",
+                options: [
+                    "10",
+                    "20",
+                    "30",
+                    "Error"
+                ],
+                answer: 1,
+                explanation: "Nilai lama diganti dengan nilai baru yaitu 20."
+            },
+            {
+                question: "Variabel dapat menyimpan...",
+                options: [
+                    "Angka",
+                    "Teks",
+                    "Data",
+                    "Semua benar"
+                ],
+                answer: 3,
+                explanation: "Variabel dapat menyimpan berbagai jenis data."
+            },
+            {
+                question: "nama = 'Andi'\nprint(nama)\nApa yang tampil?",
+                options: [
+                    "nama",
+                    "Andi",
+                    "print",
+                    "Error"
+                ],
+                answer: 1,
+                explanation: "print(nama) akan menampilkan isi variabel nama."
+            },
+            {
+                question: "Py ingin menyimpan nama pemain.\nVariabel mana yang paling cocok?",
+                options: [
+                    "nama_pemain",
+                    "123",
+                    "*",
+                    "Python"
+                ],
+                answer: 0,
+                explanation: "nama_pemain adalah nama variabel yang jelas dan mudah dipahami."
+            },
+            {
+                question: "level = 5\nApa yang disimpan?",
+                options: [
+                    "level",
+                    "angka 5",
+                    "Python",
+                    "huruf L"
+                ],
+                answer: 1,
+                explanation: "Variabel level menyimpan angka 5."
+            },
+            {
+                question: "Mengapa variabel berguna?",
+                options: [
+                    "Membuat program lebih rapi",
+                    "Menyimpan data",
+                    "Mudah digunakan kembali",
+                    "Semua benar"
+                ],
+                answer: 3,
+                explanation: "Variabel membantu program menjadi lebih mudah dibaca dan digunakan."
+            },
+            {
+                question: "🐍 Py berkata: Variabel itu seperti...",
+                options: [
+                    "Kotak penyimpanan",
+                    "Monster",
+                    "Senjata",
+                    "Jalan"
+                ],
+                answer: 0,
+                explanation: "Bayangkan variabel seperti peti yang menyimpan barang."
+            },
+            {
+                question: "Fungsi input() digunakan untuk...",
+                options: [
+                    "Menampilkan teks",
+                    "Meminta masukan dari pengguna",
+                    "Menghapus data",
+                    "Menutup program"
+                ],
+                answer: 1,
+                explanation: "input() digunakan untuk menerima data dari pengguna."
+            },
+            {
+                question: "nama = input('Masukkan nama: ')\nApa yang dilakukan program?",
+                options: [
+                    "Menampilkan gambar",
+                    "Meminta nama pengguna",
+                    "Menutup aplikasi",
+                    "Membuat game"
+                ],
+                answer: 1,
+                explanation: "Program meminta pengguna mengetikkan nama."
+            },
+            {
+                question: "Siapa yang mengisi data pada input()?",
+                options: [
+                    "Komputer",
+                    "Python",
+                    "Pengguna",
+                    "Py"
+                ],
+                answer: 2,
+                explanation: "Data dimasukkan langsung oleh pengguna."
+            },
+            {
+                question: "umur = input('Masukkan umur: ')\nApa yang diminta program?",
+                options: [
+                    "Nama",
+                    "Umur",
+                    "Alamat",
+                    "Nilai"
+                ],
+                answer: 1,
+                explanation: "Program meminta pengguna memasukkan umur."
+            },
+            {
+                question: "🐍 Py ingin mengetahui nama petualang.\nKode mana yang paling tepat?",
+                options: [
+                    "print('Nama')",
+                    "nama = input('Siapa namamu?')",
+                    "nama = 100",
+                    "if nama"
+                ],
+                answer: 1,
+                explanation: "input() digunakan untuk meminta nama dari pemain."
+            }
+        ];
+
+        const formattedChapter3 = chapter3QuestionsRaw.map(q => ({
+            type: "mc",
+            question: q.question,
+            options: q.options,
+            answer: q.answer,
+            explanation: q.explanation,
+            tip: "Variabel dan Input adalah dasar menyimpan serta menerima data di Python!",
+            output: q.options[q.answer]
+        }));
+
         const chapters = [
             {
                 title: "Pengenalan Python",
@@ -1086,6 +1275,10 @@
                         output: "5.0"
                     }
                 ]
+            },
+            {
+                title: "🌳 Hutan Variabel",
+                questions: formattedChapter3
             }
         ];
 
@@ -1145,16 +1338,6 @@
             renderQuestion();
         }
 
-        function showLockedMessage() {
-            AudioEngine.wrong();
-            document.getElementById('lock-modal').classList.add('active');
-        }
-
-        function closeLockedMessage() {
-            AudioEngine.click();
-            document.getElementById('lock-modal').classList.remove('active');
-        }
-
         /* ----------------------------------------------------------------------
            E. QUESTION RENDERER & INTERACTION LOGIC
            ---------------------------------------------------------------------- */
@@ -1172,7 +1355,7 @@
             // Set mascot speech
             setMascotState('normal', "Hitung atau pikirkan jawaban kodingannya dengan teliti ya!");
 
-            document.getElementById('question-text').innerText = `Soal ${state.currentQuestion + 1} / ${chap.questions.length}: ${q.question}`;
+            document.getElementById('question-text').innerText = `Soal ${state.currentQuestion + 1} / ${chap.questions.length}:\n${q.question}`;
 
             const codeContainer = document.getElementById('code-container');
             codeContainer.innerHTML = '';
